@@ -19,7 +19,7 @@ object StockStreaming {
   def vwap(ssc: StreamingContext): DStream[(String, Double)] = {
     val stocks = connectToStream(ssc, "localhost", 9999)
 
-    stocks.window(Seconds(30)).
+    stocks.window(Seconds(30), Seconds(15)).
       flatMap(_.map(u => {
         (u.name, (u.vol * u.value, u.vol))
       }))

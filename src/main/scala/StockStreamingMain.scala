@@ -1,4 +1,5 @@
 import org.apache.spark._
+import org.apache.spark.sql.{SaveMode, SQLContext}
 import org.apache.spark.streaming._
 
 object StockStreamingMain extends App {
@@ -9,8 +10,16 @@ object StockStreamingMain extends App {
   val sc = new SparkContext(conf)
   val ssc = new StreamingContext(sc, Seconds(1))
 
-  val vwap = StockStreaming.vwap(ssc)
-  vwap.print()
+  val vwapStream = StockStreaming.vwap(ssc)
+
+  vwapStream.foreachRDD(rdd=> {
+    // Get the singleton instance of SQLContext
+    val sqlContext = SQLContext.getOrCreate(rdd.sparkContext)
+    import sqlContext.implicits._
+
+    rdd.toDF().registerTempTable("vwap")
+    println(rdd.count())
+  })
 
   ssc.start()
   ssc.awaitTermination()
