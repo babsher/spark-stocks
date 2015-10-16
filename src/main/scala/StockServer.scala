@@ -20,14 +20,14 @@ import scala.collection.JavaConversions
  */
 object StockServer extends App {
 
-  case class Stock(name: String, rv: RandomVariable)
+  case class Stock(name: String, rv: RandomStock)
 
   var port = args(0).toInt
   val stocks = args.toIterable.drop(1)
     .map(a => {
       val s = a.split(":")
       val value = s(1).toDouble
-      Stock(s(0), new RandomVariable(value, 1.2))
+      Stock(s(0), new RandomStock(value, 0.5))
     }).toSeq
 
   class Handler(sock: Socket) extends Runnable {
