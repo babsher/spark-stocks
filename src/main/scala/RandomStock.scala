@@ -3,7 +3,7 @@ import org.apache.commons.math3.random.{MersenneTwister, RandomGenerator}
 
 class RandomStock(var lastValue: Double, val sd: Double) {
 
-  val walk = new GeometricRandomWalk(lastValue, .5, sd)
+  val walk = new GeometricRandomWalk(lastValue, .05, sd)
   val rand: RandomGenerator = new MersenneTwister()
   val volume = new NormalDistribution(rand, 100, 50)
 

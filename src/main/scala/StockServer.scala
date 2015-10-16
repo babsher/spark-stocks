@@ -27,7 +27,7 @@ object StockServer extends App {
     .map(a => {
       val s = a.split(":")
       val value = s(1).toDouble
-      Stock(s(0), new RandomStock(value, 0.5))
+      Stock(s(0), new RandomStock(value, 1.5))
     }).toSeq
 
   class Handler(sock: Socket) extends Runnable {
